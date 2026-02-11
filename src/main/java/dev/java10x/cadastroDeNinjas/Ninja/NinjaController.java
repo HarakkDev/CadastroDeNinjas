@@ -1,20 +1,39 @@
 package dev.java10x.cadastroDeNinjas.Ninja;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/bemVindo")
+@RequestMapping("/ninja")
 public class NinjaController {
 
-    @GetMapping("/positivo")
-    public String boasVindas(){
-        return "ola";
+    @Autowired
+    NinjaService ninjaService;
+
+    @GetMapping("/listar")
+    public List<Ninja> listar(){
+       return this.ninjaService.listar();
     }
 
-    @GetMapping("/negativo")
-    public String pessimasVindas(){
-        return "Vai embora";
+    @GetMapping("/buscar/{id}")
+    public Ninja buscar(@PathVariable Long id){
+        return this.ninjaService.buscar(id);
+    }
+
+    @PostMapping("/criar")
+    public Ninja criar(@RequestBody Ninja ninja){
+        return this.ninjaService.criar(ninja);
+    }
+
+    @DeleteMapping("/deletar/{id}")
+    public void deletar(@PathVariable Long id){
+        this.ninjaService.deletar(id);
+    }
+
+    @PutMapping("/atualizar/{id}")
+    public Ninja atualizar(@PathVariable Long id, @RequestBody Ninja ninja){
+        return this.ninjaService.atualizar(id, ninja);
     }
 }

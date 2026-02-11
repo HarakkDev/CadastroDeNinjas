@@ -1,6 +1,6 @@
 package dev.java10x.cadastroDeNinjas.Ninja;
 
-import dev.java10x.cadastroDeNinjas.Missoes.Missao;
+import dev.java10x.cadastroDeNinjas.Missao.Missao;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,4 +28,6 @@ public class Ninja {
     @ManyToOne
     @JoinColumn(name = "missaoId")
     private Missao missao;
+
+    private String rank;
 }

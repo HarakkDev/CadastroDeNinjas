@@ -1,5 +1,6 @@
-package dev.java10x.cadastroDeNinjas.Missoes;
+package dev.java10x.cadastroDeNinjas.Missao;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.java10x.cadastroDeNinjas.Ninja.Ninja;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,5 +23,6 @@ public class Missao {
     private String dificuldade;
 
     @OneToMany(mappedBy = "missao")
+    @JsonIgnore
     private List<Ninja> ninja;
 }
