@@ -15,12 +15,12 @@ public class MissaoController {
     MissaoService missaoService;
 
     @GetMapping("/listar")
-    public List<Missao> listar(){
+    public List<MissaoDTO> listar(){
         return this.missaoService.listar();
     }
 
     @GetMapping("/detalhes/{id}")
-    public Missao detalhes(@PathVariable Long id){
+    public MissaoDTO detalhes(@PathVariable Long id){
         return this.missaoService.detalhes(id);
     }
 
@@ -30,12 +30,12 @@ public class MissaoController {
     }
 
     @PostMapping("/criar")
-    public Missao criar(@RequestBody Missao missao){
+    public MissaoDTO criar(@RequestBody MissaoDTO missao){
         return this.missaoService.criar(missao);
     }
 
     @PutMapping("/atualizar/{id}")
-    public Missao atualizar(@PathVariable Long id, @RequestBody Missao missao){
-        return this.missaoService.atualizar(id, missao);
+    public MissaoDTO atualizar(@PathVariable Long id, @RequestBody MissaoDTO missaoDTO){
+        return this.missaoService.atualizar(id, missaoDTO);
     }
 }
