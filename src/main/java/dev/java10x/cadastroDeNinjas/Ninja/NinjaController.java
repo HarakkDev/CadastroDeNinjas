@@ -1,6 +1,7 @@
 package dev.java10x.cadastroDeNinjas.Ninja;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,27 +14,27 @@ public class NinjaController {
     NinjaService ninjaService;
 
     @GetMapping("/listar")
-    public List<NinjaDTO> listar(){
-       return this.ninjaService.listar();
+    public ResponseEntity<List<NinjaDTO>> listar(){
+        return this.ninjaService.listar();
     }
 
     @GetMapping("/buscar/{id}")
-    public NinjaDTO buscar(@PathVariable Long id){
+    public ResponseEntity<String> buscar(@PathVariable Long id){
         return this.ninjaService.buscar(id);
     }
 
     @PostMapping("/criar")
-    public NinjaDTO criar(@RequestBody NinjaDTO ninja){
+    public ResponseEntity<String> criar(@RequestBody NinjaDTO ninja){
         return this.ninjaService.criar(ninja);
     }
 
-    @DeleteMapping("/deletar/{id}")
-    public void deletar(@PathVariable Long id){
-        this.ninjaService.deletar(id);
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<String> atualizar(@PathVariable Long id, @RequestBody NinjaDTO ninja){
+        return this.ninjaService.atualizar(id, ninja);
     }
 
-    @PutMapping("/atualizar/{id}")
-    public NinjaDTO atualizar(@PathVariable Long id, @RequestBody NinjaDTO ninja){
-        return this.ninjaService.atualizar(id, ninja);
+    @DeleteMapping("/deletar/{id}")
+    public ResponseEntity<String> deletar(@PathVariable Long id){
+        return this.ninjaService.deletar(id);
     }
 }

@@ -9,6 +9,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "missao")
 @Table(name = "tb_ninja")
 public class Ninja {
 

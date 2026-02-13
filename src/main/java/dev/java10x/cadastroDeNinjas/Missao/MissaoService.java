@@ -1,9 +1,12 @@
 package dev.java10x.cadastroDeNinjas.Missao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -16,36 +19,45 @@ public class MissaoService {
     @Autowired
     MissaoMapper missaoMapper;
 
-    public List<MissaoDTO> listar() {
+    public ResponseEntity<List<MissaoDTO>> listar() {
         List<Missao> missoes = missaoRepository.findAll();
-        return missoes.stream()
+        return ResponseEntity.ok(missoes.stream()
                 .map(missaoMapper::map)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
-    public MissaoDTO detalhes(Long id) {
-        Optional<Missao> missao = missaoRepository.findById(id);
-        return missao.map(missaoMapper::map).orElse(null);
+    public ResponseEntity<String> detalhes(Long id) {
+        if(!missaoRepository.existsById(id)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Missão não encontrada com o ID: " + id);
+        }
+        Optional<Missao> missao = this.missaoRepository.findById(id);
+        return ResponseEntity.ok("Nome da missão: " + Objects.requireNonNull(missao.map(missaoMapper::map).orElse(null)).getNome());
     }
 
-    public void deletar(Long id) {
-        this.missaoRepository.deleteById(id);
-    }
-
-    public MissaoDTO criar(MissaoDTO missaoDTO) {
+    public ResponseEntity<String> criar(MissaoDTO missaoDTO) {
         Missao missao = missaoMapper.map(missaoDTO);
         missao = missaoRepository.save(missao);
-        return missaoMapper.map(missao);
+        missaoMapper.map(missao);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Missão criada com sucesso!");
     }
 
-    public MissaoDTO atualizar(Long id, MissaoDTO missaoDTO) {
+    public ResponseEntity<String> atualizar(Long id, MissaoDTO missaoDTO) {
         Optional<Missao> missao = missaoRepository.findById(id);
         if (missao.isPresent()){
             Missao missaoAtt = missaoMapper.map(missaoDTO);
             missaoAtt.setId(id);
             Missao missaoSalvar = this.missaoRepository.save(missaoAtt);
-            return missaoMapper.map(missaoSalvar);
+            missaoMapper.map(missaoSalvar);
+            return ResponseEntity.ok("Missão atualizada com sucesso!");
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Missão não encontrada com o ID: " + id);
+    }
+
+    public ResponseEntity<String> deletar(Long id) {
+        if (missaoRepository.existsById(id)){
+            missaoRepository.deleteById(id);
+            return ResponseEntity.ok("Missão deletada com sucesso!");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Missão com o id " + id + " não encontrado!");
     }
 }
